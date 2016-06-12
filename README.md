@@ -1,6 +1,12 @@
 # Gettext translator
 Javascript gettext translator. Use [gettext/gettext](https://github.com/oscarotero/Gettext) PHP library to generate and modify the messages.
 
+Supports:
+
+* AMD
+* CommonJS
+* Global js
+
 ## Usage
 
 Use the Json generator of the [gettext/gettext](https://github.com/oscarotero/Gettext) library:
