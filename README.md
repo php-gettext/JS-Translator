@@ -27,9 +27,18 @@ var i18n = new Translator(translations);
 console.log(i18n.gettext('hello world')); //ola mundo
 ```
 
+## Sprintf
+
+This library includes [sprintf](https://github.com/alexei/sprintf.js) dependency implemented in the short methods:
+
+```js
+i18n.__('Hello %s', 'world'); //Hello world
+i18n.n__('One comment', '%s comments', 12, 12); //12 comments
+```
+
 ## API
 
-method | short | description
+Long method | Short + sprintf | description
 ------ | ----- | -----------
 gettext | __ | Returns a translation
 ngettext | n__ | Returns a translation with singular/plural variations
@@ -39,12 +48,3 @@ pgettext | p__ | Returns a translation with a specific context
 dgettext | d__ | Returns a translation with a specific domain
 dpgettext | dp__ | Returns a translation with a specific domain and context
 dnpgettext | dnp__ | Returns a translation with a specific domain, context and singular/plural variations
-
-## Sprintf
-
-This library includes [sprintf](https://github.com/alexei/sprintf.js) dependency implemented in the short methods:
-
-```js
-i18n.__('Hello %s', 'world'); //Hello world
-i18n.n__('One comment', '%s comments', 12, 12); //12 comments
-```
