@@ -1,0 +1,25 @@
+{
+  "name": "gettext-translator",
+  "version": "1.0.0",
+  "description": "Javascript gettext translator",
+  "main": "src/translator.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests/test.js"
+  },
+  "keywords": [
+    "gettext",
+    "i18n",
+    "translator"
+  ],
+  "author": "oscarotero <oom@oscarotero.com>",
+  "license": "MIT",
+  "dependencies": {
+    "sprintf-js": "^1.0.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  }
+}
