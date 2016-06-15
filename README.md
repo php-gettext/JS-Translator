@@ -1,4 +1,5 @@
 # Gettext translator
+
 Javascript gettext translator. Use [gettext/gettext](https://github.com/oscarotero/Gettext) PHP library to generate and modify the messages.
 
 Supports:
@@ -7,21 +8,35 @@ Supports:
 * CommonJS
 * Global js
 
+## Installation
+
+Using bower:
+
+```
+bower install gettext-translator
+```
+
+Using npm:
+
+```
+npm install gettext-translator
+```
+
 ## Usage
 
-Use the Json generator of the [gettext/gettext](https://github.com/oscarotero/Gettext) library:
+Use the Json generator of the [gettext/gettext](https://github.com/oscarotero/Gettext) library to export the translations to json:
 
 ```php
 use Gettext\Translations;
 
-//Scan the po file with the translations
+//Load the po file with the translations
 $translations = Translations::fromPoFile('locales/gl.po');
 
 //Export to a json file
 $translations->toJsonFile('locales/gl.json');
 ```
 
-Load the json file in your javascript (for example, using webpack) and use it
+Load the json file in your browser (for example, using webpack) and use it
 
 ```js
 var Translator = require('gettext-translator');
@@ -29,13 +44,12 @@ var translations = require('locales/gl.json');
 
 var i18n = new Translator(translations);
 
-
 console.log(i18n.gettext('hello world')); //ola mundo
 ```
 
 ## Sprintf
 
-This library includes [sprintf](https://github.com/alexei/sprintf.js) dependency implemented in the short methods:
+This library includes [sprintf](https://github.com/alexei/sprintf.js) dependency implemented in the short methods like `__`, `n__`, etc...:
 
 ```js
 i18n.__('Hello %s', 'world'); //Hello world
