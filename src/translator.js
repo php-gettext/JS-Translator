@@ -38,12 +38,14 @@
                 return this;
             }
 
-            var plural = translations['plural-forms'].split(';', 2);
+            if (translations['plural-forms']) {
+                var plural = translations['plural-forms'].split(';', 2);
 
-            this.plurals[domain] = {
-                count: parseInt(plural[0].replace('nplurals=', '')),
-                code: plural[1].replace('plural=', 'return ') + ';'
-            };
+                this.plurals[domain] = {
+                    count: parseInt(plural[0].replace('nplurals=', '')),
+                    code: plural[1].replace('plural=', 'return ') + ';'
+                };
+            }
 
             this.dictionary[domain] = translations.messages;
 
