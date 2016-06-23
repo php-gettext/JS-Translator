@@ -11,7 +11,7 @@
 
     //global
     } else {
-        root.gettext = factory(window.vsprintf);
+        root.Translator = factory(window.vsprintf);
     }
 }(this, function (vsprintf) {
 
