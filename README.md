@@ -10,14 +10,6 @@ Supports:
 
 ## Installation
 
-Using bower:
-
-```
-bower install gettext-translator
-```
-
-Using npm:
-
 ```
 npm install gettext-translator
 ```

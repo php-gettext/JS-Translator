@@ -1,6 +1,6 @@
 {
   "name": "gettext-translator",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Javascript gettext translator",
   "main": "src/translator.js",
   "directories": {
@@ -20,6 +20,6 @@
     "sprintf-js": "^1.0.3"
   },
   "devDependencies": {
-    "mocha": "^2.5.3"
+    "mocha": "^3.4.2"
   }
 }
