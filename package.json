@@ -1,6 +1,6 @@
 {
   "name": "gettext-translator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Javascript gettext translator",
   "main": "src/translator.js",
   "directories": {

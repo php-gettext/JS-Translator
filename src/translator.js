@@ -1,7 +1,7 @@
 (function (root, factory) {
     //amd
     if (typeof define === "function" && define.amd) {
-        define(['sprintf'], function (sprintf) {
+        define(['sprintf-js'], function (sprintf) {
             return factory(sprintf.vsprintf);
         });
 
