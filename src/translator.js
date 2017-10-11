@@ -172,7 +172,7 @@
             plurals[domain].fn = new Function('n', plurals[domain].code);
         }
 
-        return plurals[domain].fn.call(this, value);
+        return plurals[domain].fn.call(this, value) ? 1 : 0;
     }
 
     function mergeTranslations(translations, newTranslations) {
