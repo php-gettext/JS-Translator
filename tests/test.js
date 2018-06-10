@@ -27,3 +27,25 @@ describe('vsprintf functions', function() {
         assert.equal('2 arquivos', i18n.n__('one file', '%s files', 2, 2));
     });
 });
+
+describe('custom plural functions', function() {
+    var translations = require(__dirname + '/translations3.json');
+    var called = false;
+    translations.fn = function (n) {
+        called = true;
+        return 2;
+    };
+
+    i18n.loadTranslations(translations);
+
+    it('should return always the second plural', function () {
+        assert.equal('foo 3', i18n.dngettext('foo', 'foo x', 'foo y', 0));
+        assert.equal('foo 3', i18n.dngettext('foo', 'foo x', 'foo y', 1));
+        assert.equal('foo 3', i18n.dngettext('foo', 'foo x', 'foo y', 2));
+        assert.equal('foo 3', i18n.dngettext('foo', 'foo x', 'foo y', 3));
+    });
+
+    it('the custom function was called', function () {
+        assert(called, 'The custom function was not called')
+    });
+});

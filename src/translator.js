@@ -38,7 +38,9 @@
                 return this;
             }
 
-            if (translations['plural-forms']) {
+            if (translations.fn) {
+                this.plurals[domain] = { fn: translations.fn };
+            } else if (translations['plural-forms']) {
                 var plural = translations['plural-forms'].split(';', 2);
 
                 this.plurals[domain] = {
