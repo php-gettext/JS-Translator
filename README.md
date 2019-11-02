@@ -1,12 +1,6 @@
 # Gettext translator
 
-Javascript gettext translator. Use [gettext/gettext](https://github.com/oscarotero/Gettext) PHP library to generate and modify the messages.
-
-Supports:
-
-* AMD
-* CommonJS
-* Global js
+Javascript gettext translations replacement to use with [gettext/gettext](https://github.com/php-gettext/Gettext). Use [gettext/json](https://github.com/php-gettext/Json) to generate the json data.
 
 ## Installation
 
@@ -16,47 +10,75 @@ npm install gettext-translator
 
 ## Usage
 
-Use the Json generator of the [gettext/gettext](https://github.com/oscarotero/Gettext) library to export the translations to json:
+Use the Json generator [gettext/json](https://github.com/php-gettext/Json) library to export the translations to json:
 
 ```php
-use Gettext\Translations;
+use Gettext\Loader\PoLoader;
+use Gettext\Generator\JsonGenerator;
 
 //Load the po file with the translations
-$translations = Translations::fromPoFile('locales/gl.po');
+$translations = (new PoLoader())->loadFile('locales/gl.po');
 
 //Export to a json file
-$translations->toJsonFile('locales/gl.json');
+(new JsonGenerator())->generateFile('locales/gl.json');
 ```
 
-Load the json file in your browser (for example, using webpack) and use it
+Load the json file in your browser
 
 ```js
-var Translator = require('gettext-translator');
-var translations = require('locales/gl.json');
+import Translator from 'gettext-translator';
 
-var i18n = new Translator(translations);
+async function getTranslator() {
+    const response = await fetch('locales/gl.json');
+    const translations = await response.json();
 
-console.log(i18n.gettext('hello world')); //ola mundo
+    return new Translator(translations);
+}
+
+const translator = await getTranslator();
+
+translator.gettext('hello world'); //ola mundo
 ```
 
-## Sprintf
+## Variables
 
-This library includes [sprintf](https://github.com/alexei/sprintf.js) dependency implemented in the short methods like `__`, `n__`, etc...:
+You can add variables to the translations. For example:
 
 ```js
-i18n.__('Hello %s', 'world'); //Hello world
-i18n.n__('One comment', '%s comments', 12, 12); //12 comments
+translator.gettext('hello :who', {':who': 'world'}); //ola world
+```
+
+To use vsprintf, just install one of the available implementations, for example [sprintf](https://github.com/alexei/sprintf.js) and assign the function as the value of `vsprintf` property.
+
+```js
+const sprintf = require('sprintf-js);
+
+translator.vsprintf = sprintf.vsprintf;
+
+translator.gettext('Hello %s', 'world'); //Hello world
+translator.ngettext('One comment', '%s comments', 12, 12); //12 comments
+```
+
+## Short names
+
+Like in the [php version](https://github.com/php-gettext/Translator), there are the `__` functions that are alias of the long version:
+
+```js
+//Both functions does the same
+
+translator.gettext('Foo');
+translator.__('Foo');
 ```
 
 ## API
 
-Long method | Short + sprintf | description
------- | ----- | -----------
-gettext | __ | Returns a translation
-ngettext | n__ | Returns a translation with singular/plural variations
-dngettext | dn__ | Returns a translation with domain and singular/plural variations
-npgettext | np__ | Returns a translation with context and singular/plural variations
-pgettext | p__ | Returns a translation with a specific context
-dgettext | d__ | Returns a translation with a specific domain
-dpgettext | dp__ | Returns a translation with a specific domain and context
-dnpgettext | dnp__ | Returns a translation with a specific domain, context and singular/plural variations
+Long name  | Short name | Description
+-----------| -----------| -----------
+gettext    | __         | Returns a translation
+ngettext   | n__        | Returns a translation with singular/plural variations
+dngettext  | dn__       | Returns a translation with domain and singular/plural variations
+npgettext  | np__       | Returns a translation with context and singular/plural variations
+pgettext   | p__        | Returns a translation with a specific context
+dgettext   | d__        | Returns a translation with a specific domain
+dpgettext  | dp__       | Returns a translation with a specific domain and context
+dnpgettext | dnp__      | Returns a translation with a specific domain, context and singular/plural variations

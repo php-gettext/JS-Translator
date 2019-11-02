@@ -1,206 +1,182 @@
-(function (root, factory) {
-    //amd
-    if (typeof define === "function" && define.amd) {
-        define(['sprintf-js'], function (sprintf) {
-            return factory(sprintf.vsprintf);
-        });
-
-    //commonjs
-    } else if (typeof module === "object" && module.exports) {
-        module.exports = factory(require('sprintf-js').vsprintf);
-
-    //global
-    } else {
-        root.Translator = factory(window.vsprintf);
-    }
-}(this, function (vsprintf) {
-
-    function Translator (translations) {
+export default class Translator {
+    constructor(translations) {
         this.dictionary = {};
         this.plurals = {};
-        this.domain = null;
+        this.domain = undefined;
+        this.vsprintf = undefined;
 
         if (translations) {
             this.loadTranslations(translations);
         }
     }
 
-    Translator.prototype = {
-        loadTranslations: function (translations) {
-            var domain = translations.domain || '';
+    loadTranslations(translations) {
+        const domain = translations.domain || '';
 
-            if (this.domain === null) {
-                this.domain = domain;
-            }
-
-            if (this.dictionary[domain]) {
-                mergeTranslations(this.dictionary[domain], translations.messages);
-                return this;
-            }
-
-            if (translations.fn) {
-                this.plurals[domain] = { fn: translations.fn };
-            } else if (translations['plural-forms']) {
-                var plural = translations['plural-forms'].split(';', 2);
-
-                this.plurals[domain] = {
-                    count: parseInt(plural[0].replace('nplurals=', '')),
-                    code: plural[1].replace('plural=', 'return ') + ';'
-                };
-            }
-
-            this.dictionary[domain] = translations.messages;
-
-            return this;
-        },
-
-        defaultDomain: function (domain) {
+        if (this.domain === undefined) {
             this.domain = domain;
+        }
 
+        if (this.dictionary[domain]) {
+            mergeTranslations(this.dictionary[domain], translations.messages);
             return this;
-        },
-
-        gettext: function (original) {
-            return this.dpgettext(this.domain, null, original);
-        },
-
-        ngettext: function (original, plural, value) {
-            return this.dnpgettext(this.domain, null, original, plural, value);
-        },
-
-        dngettext: function (domain, original, plural, value) {
-            return this.dnpgettext(domain, null, original, plural, value);
-        },
-
-        npgettext: function (context, original, plural, value) {
-            return this.dnpgettext(this.domain, context, original, plural, value);
-        },
-
-        pgettext: function (context, original) {
-            return this.dpgettext(this.domain, context, original);
-        },
-
-        dgettext: function (domain, original) {
-            return this.dpgettext(domain, null, original);
-        },
-
-        dpgettext: function (domain, context, original) {
-            var translation = getTranslation(this.dictionary, domain, context, original);
-
-            if (translation !== false && translation[0] !== '') {
-                return translation[0];
-            }
-
-            return original;
-        },
-
-        dnpgettext: function (domain, context, original, plural, value) {
-            var index = getPluralIndex(this.plurals, domain, value);
-            var translation = getTranslation(this.dictionary, domain, context, original);
-
-            if (translation[index] && translation[index] !== '') {
-                return translation[index];
-            }
-
-            return (index === 0) ? original : plural;
-        },
-
-        __: function (original) {
-            return format(
-                this.gettext(original),
-                Array.prototype.slice.call(arguments, 1)
-            );
-        },
-
-        n__: function (original, plural, value) {
-            return format(
-                this.ngettext(original, plural, value),
-                Array.prototype.slice.call(arguments, 3)
-            );
-        },
-
-        p__: function (context, original) {
-            return format(
-                this.pgettext(context, original),
-                Array.prototype.slice.call(arguments, 2)
-            );
-        },
-
-        d__: function (domain, original) {
-            return format(
-                this.dgettext(domain, original),
-                Array.prototype.slice.call(arguments, 2)
-            );
-        },
-
-        dp__: function (domain, context, original) {
-            return format(
-                this.dgettext(domain, context, original),
-                Array.prototype.slice.call(arguments, 3)
-            );
-        },
-
-        np__: function (context, original, plural, value) {
-            return format(
-                this.npgettext(context, original, plural, value),
-                Array.prototype.slice.call(arguments, 4)
-            );
-        },
-
-        dnp__: function (domain, context, original, plural, value) {
-            return format(
-                this.dnpgettext(domain, context, original, plural, value),
-                Array.prototype.slice.call(arguments, 5)
-            );
-        }
-    };
-
-    function getTranslation(dictionary, domain, context, original) {
-        context = context || '';
-
-        if (!dictionary[domain] || !dictionary[domain][context] || !dictionary[domain][context][original]) {
-            return false;
         }
 
-        return dictionary[domain][context][original];
+        if (translations.fn) {
+            this.plurals[domain] = { fn: translations.fn };
+        } else if (translations['plural-forms']) {
+            const plural = translations['plural-forms'].split(';', 2);
+
+            this.plurals[domain] = {
+                count: parseInt(plural[0].replace('nplurals=', '')),
+                code: plural[1].replace('plural=', 'return ') + ';'
+            };
+        }
+
+        this.dictionary[domain] = translations.messages;
+
+        return this;
     }
 
-    function getPluralIndex(plurals, domain, value) {
-        if (!plurals[domain]) {
-            return value == 1 ? 0 : 1;
-        }
-
-        if (!plurals[domain].fn) {
-            plurals[domain].fn = new Function('n', plurals[domain].code);
-        }
-
-        return plurals[domain].fn.call(this, value) + 0;
+    defaultDomain(domain) {
+        this.domain = domain;
+        return this;
     }
 
-    function mergeTranslations(translations, newTranslations) {
-        for (var context in newTranslations) {
-            if (!translations[context]) {
-                translations[context] = newTranslations[context];
-                continue;
-            }
-
-            for (var original in newTranslations[context]) {
-                translations[context][original] = newTranslations[context][original];
-            }
-        }
+    gettext(original, ...args) {
+        return this.format(this.translate(undefined, undefined, original), ...args);
     }
 
-    function format (text, args) {
+    ngettext(original, plural, counter, ...args) {
+        return this.format(this.translatePlural(undefined, undefined, original, plural, counter), ...args);
+    }
+
+    dngettext(domain, original, plural, counter, ...args) {
+        return this.format(this.translatePlural(domain, undefined, original, plural, counter), ...args);
+    }
+
+    npgettext(context, original, plural, counter, ...args) {
+        return this.format(this.translatePlural(undefined, context, original, plural, counter), ...args);
+    }
+
+    pgettext(context, original, ...args) {
+        return this.format(this.translate(undefined, context, original), ...args);
+    }
+
+    dgettext(domain, original, ...args) {
+        return this.format(this.translate(domain, undefined, original), ...args);
+    }
+
+    dpgettext(domain, context, original, ...args) {
+        return this.format(this.translate(domain, context, original), ...args);
+    }
+
+    dnpgettext(domain, context, original, plural, counter, ...args) {
+        return this.format(this.translatePlural(domain, context, original, plural, counter), ...args);
+    }
+
+    __(original, ...args) {
+        return this.gettext(original, ...args);
+    }
+
+    n__(original, plural, value, ...args) {
+        return this.ngettext(original, plural, value, ...args);
+    }
+
+    p__(context, original, ...args) {
+        return this.pgettext(context, original, ...args);
+    }
+
+    d__(domain, original, ...args) {
+        return this.dgettext(domain, original, ...args);
+    }
+
+    dp__(domain, context, original, ...args) {
+        return this.dpgettext(domain, context, original, ...args);
+    }
+
+    np__(context, original, plural, value, ...args) {
+        return this.npgettext(context, original, plural, value, ...args);
+    }
+
+    dnp__(domain, context, original, plural, value, ...args) {
+        return this.dnpgettext(domain, context, original, plural, value, ...args);
+    }
+
+    format(text, ...args) {
         if (!args.length) {
             return text;
         }
 
-        if (args[0] instanceof Array) {
-            return vsprintf(text, args[0]);
+        if (typeof args[0] === 'object') {
+            Object.keys(args[0]).forEach(search => {
+                text = text.replace(search, args[0][search]);
+            });
+
+            return text;
         }
 
-        return vsprintf(text, args);
+        if (this.vsprintf) {
+            return this.vsprintf(text, args);
+        }
+
+        return text;
     }
 
-    return Translator;
-}));
+    translate(domain, context, original) {
+        const translation = this.getTranslation(domain, context, original);
+
+        return translation && translation[0] ? translation[0] : original;
+    }
+
+    translatePlural(domain, context, original, plural, counter) {
+        const translation = this.getTranslation(domain, context, original);
+        const index = this.getPluralIndex(domain, counter);
+
+        return translation && translation[index] ? translation[index] : index === 0 ? original : plural;
+    }
+
+    getTranslation(domain, context, original) {
+        domain = domain || this.domain;
+        context = context || '';
+
+        if (
+            !this.dictionary[domain] ||
+            !this.dictionary[domain][context] ||
+            !this.dictionary[domain][context][original]
+        ) {
+            return undefined;
+        }
+
+        const translation = this.dictionary[domain][context][original];
+
+        return Array.isArray(translation) ? translation : [translation];
+    }
+
+    getPluralIndex(domain, value) {
+        domain = domain || this.domain;
+
+        if (!this.plurals[domain]) {
+            return value == 1 ? 0 : 1;
+        }
+
+        if (!this.plurals[domain].fn) {
+            this.plurals[domain].fn = new Function('n', this.plurals[domain].code);
+        }
+
+        return this.plurals[domain].fn.call(this, value) + 0;
+    }
+}
+
+function mergeTranslations(translations, newTranslations) {
+    for (let context in newTranslations) {
+        if (!translations[context]) {
+            translations[context] = newTranslations[context];
+            continue;
+        }
+
+        for (let original in newTranslations[context]) {
+            translations[context][original] = newTranslations[context][original];
+        }
+    }
+}

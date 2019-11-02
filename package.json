@@ -1,13 +1,14 @@
 {
   "name": "gettext-translator",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Javascript gettext translator",
   "main": "src/translator.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests/test.js"
+    "test": "mocha --require @babel/register tests/test.js",
+    "prettier": "prettier src/*.js tests/*.js --single-quote --tab-width 4 --write --print-width 120"
   },
   "keywords": [
     "gettext",
@@ -17,9 +18,13 @@
   "author": "oscarotero <oom@oscarotero.com>",
   "license": "MIT",
   "dependencies": {
-    "sprintf-js": "^1.0.3"
   },
   "devDependencies": {
-    "mocha": "^5.0.0"
+    "sprintf-js": "^1.0.3",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "mocha": "^6.2.2",
+    "prettier": "^1.18.2"
   }
 }
