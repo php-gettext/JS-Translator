@@ -35,9 +35,9 @@ async function getTranslator() {
     return new Translator(translations);
 }
 
-const translator = await getTranslator();
+const t = await getTranslator();
 
-translator.gettext('hello world'); //ola mundo
+t.gettext('hello world'); //ola mundo
 ```
 
 ## Variables
@@ -45,19 +45,19 @@ translator.gettext('hello world'); //ola mundo
 You can add variables to the translations. For example:
 
 ```js
-translator.gettext('hello :who', {':who': 'world'}); //ola world
+t.gettext('hello :who', {':who': 'world'}); //ola world
 ```
 
 There's also a basic support o sprintf (only `%s` and `%d`)
 
 ```js
-translator.gettext('hello %s', 'world'); //ola world
+t.gettext('hello %s', 'world'); //ola world
 ```
 
 To customize the translator formatter, just override the `format` method:
 
 ```js
-translator.format = function (text, ...args) {
+t.format = function (text, ...args) {
     //Your custom format here
 }
 ```
@@ -69,8 +69,8 @@ Like in the [php version](https://github.com/php-gettext/Translator), there are 
 ```js
 //Both functions does the same
 
-translator.gettext('Foo');
-translator.__('Foo');
+t.gettext('Foo');
+t.__('Foo');
 ```
 
 ## API
