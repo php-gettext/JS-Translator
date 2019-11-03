@@ -3,7 +3,6 @@ export default class Translator {
         this.dictionary = {};
         this.plurals = {};
         this.domain = undefined;
-        this.vsprintf = undefined;
 
         if (translations) {
             this.loadTranslations(translations);
@@ -187,23 +186,4 @@ function mergeTranslations(translations, newTranslations) {
             translations[context][original] = newTranslations[context][original];
         }
     }
-}
-
-function vsprintf(string, args) {
-    const replace = [].concat(args || []);
-
-    return string.replace(/(%[sd])/g, function(match) {
-        console.log(replace);
-        if (!replace.length) {
-            return match;
-        }
-
-        if (match === '%s') {
-            return replace.shift();
-        }
-
-        if (match === '%d') {
-            return ParseFloat(replace.shift());
-        }
-    });
 }
