@@ -48,15 +48,18 @@ You can add variables to the translations. For example:
 translator.gettext('hello :who', {':who': 'world'}); //ola world
 ```
 
-To use vsprintf, just install one of the available implementations, for example [sprintf](https://github.com/alexei/sprintf.js) and assign the function as the value of `vsprintf` property.
+There's also a basic support o sprintf (only `%s` and `%d`)
 
 ```js
-const sprintf = require('sprintf-js);
+translator.gettext('hello %s', 'world'); //ola world
+```
 
-translator.vsprintf = sprintf.vsprintf;
+To customize the translator formatter, just override the `format` method:
 
-translator.gettext('Hello %s', 'world'); //Hello world
-translator.ngettext('One comment', '%s comments', 12, 12); //12 comments
+```js
+translator.format = function (text, ...args) {
+    //Your custom format here
+}
 ```
 
 ## Short names

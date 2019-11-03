@@ -116,11 +116,19 @@ export default class Translator {
             return text;
         }
 
-        if (this.vsprintf) {
-            return this.vsprintf(text, args);
-        }
+        return text.replace(/(%[sd])/g, function(match) {
+            if (!args.length) {
+                return match;
+            }
 
-        return text;
+            switch (match) {
+                case '%s':
+                    return args.shift();
+
+                case '%d':
+                    return parseFloat(args.shift());
+            }
+        });
     }
 
     translate(domain, context, original) {
@@ -179,4 +187,23 @@ function mergeTranslations(translations, newTranslations) {
             translations[context][original] = newTranslations[context][original];
         }
     }
+}
+
+function vsprintf(string, args) {
+    const replace = [].concat(args || []);
+
+    return string.replace(/(%[sd])/g, function(match) {
+        console.log(replace);
+        if (!replace.length) {
+            return match;
+        }
+
+        if (match === '%s') {
+            return replace.shift();
+        }
+
+        if (match === '%d') {
+            return ParseFloat(replace.shift());
+        }
+    });
 }
