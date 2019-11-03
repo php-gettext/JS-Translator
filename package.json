@@ -4,9 +4,10 @@
   "description": "Javascript gettext translator",
   "main": "dist/translator.js",
   "module": "src/translator.js",
-  "directories": {
-    "test": "tests"
-  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "test": "mocha --require @babel/register tests/test.js",
     "build": "babel src --out-dir dist",
