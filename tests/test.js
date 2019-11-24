@@ -5,11 +5,8 @@ import translations1 from './translations.json';
 import translations2 from './translations2.json';
 import translations3 from './translations3.json';
 
-const sprintf = require('sprintf-js');
-
 const translator = new Translator(translations1);
 translator.loadTranslations(translations2);
-translator.vsprintf = sprintf.vsprintf;
 
 describe('Basic functions', function() {
     it('gettext', function() {

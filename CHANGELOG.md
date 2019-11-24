@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.1] - 2019-11-24
+### Added
+- Support for UMD [#5]
+
+### Fixed
+- Tests
+
 ## [3.0.0] - 2019-11-03
 ### Added
 - Support for ES6 modules.
@@ -20,5 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Allow to include the plural function in the translations to prevent CSP errors [#4]
 
 [#4]: https://github.com/php-gettext/gettext-translator/issues/4
+[#5]: https://github.com/php-gettext/gettext-translator/issues/5
 
+[3.0.1]: https://github.com/php-gettext/gettext-translator/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/php-gettext/gettext-translator/compare/v2.1.0...v3.0.0
