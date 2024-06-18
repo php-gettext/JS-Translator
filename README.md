@@ -20,7 +20,7 @@ use Gettext\Generator\JsonGenerator;
 $translations = (new PoLoader())->loadFile('locales/gl.po');
 
 //Export to a json file
-(new JsonGenerator())->generateFile('locales/gl.json');
+(new JsonGenerator())->generateFile($translations, 'locales/gl.json');
 ```
 
 Load the json file in your browser
