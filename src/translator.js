@@ -90,6 +90,10 @@ export default class Translator {
         return this.dgettext(domain, original, ...args);
     }
 
+    dn__(domain, original, plural, counter, ...args) {
+        return this.dngettext(domain, original, plural, counter, ...args);
+    }
+
     dp__(domain, context, original, ...args) {
         return this.dpgettext(domain, context, original, ...args);
     }
