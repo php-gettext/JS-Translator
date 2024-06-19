@@ -1,9 +1,12 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/) 
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [3.0.2] - 2024-06-19
+### Added
+- Missing `dn__` shortcut function [#8].
 
 ## [3.0.1] - 2019-11-24
 ### Added
@@ -22,12 +25,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support for AMD and Global js.
 - Sprintf dependency by default. Now the library has a (very) limited sprintf implementation but open to extend and improved.
 
-## 2.1.0 - 2018-06-12
+## [2.1.0] - 2018-06-12
 ### Added
 - Allow to include the plural function in the translations to prevent CSP errors [#4]
 
 [#4]: https://github.com/php-gettext/gettext-translator/issues/4
 [#5]: https://github.com/php-gettext/gettext-translator/issues/5
+[#8]: https://github.com/php-gettext/gettext-translator/issues/8
 
+[3.0.2]: https://github.com/php-gettext/gettext-translator/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/php-gettext/gettext-translator/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/php-gettext/gettext-translator/compare/v2.1.0...v3.0.0
+[2.1.0]: https://github.com/php-gettext/gettext-translator/releases/tag/v2.1.0
